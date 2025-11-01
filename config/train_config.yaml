@@ -4,6 +4,6 @@ dataset_yaml: dataset/data.yaml
 # training
 training_params:
   epochs: 150
-  batch: 8
+  batch: 50
   imgsz: 640
   name: YOLO_SEGMENT_FLOOR_PLAN
