@@ -1,0 +1,1 @@
+from core.trainer import YOLOV11Trainer
