@@ -2,8 +2,11 @@ model_name: yolo11x-seg.yaml
 dataset_yaml: dataset/data.yaml
 
 # training
+# thong so huan luyen
+# vui long xem tren:
+# https://docs.ultralytics.com/vi/modes/train/
 training_params:
   epochs: 150
-  batch: 50
+  batch: 2
   imgsz: 640
   name: YOLO_SEGMENT_FLOOR_PLAN
