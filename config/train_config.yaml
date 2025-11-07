@@ -10,3 +10,4 @@ training_params:
   batch: 50
   imgsz: 640
   name: YOLO_SEGMENT_FLOOR_PLAN
+  device: [0, 1]

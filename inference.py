@@ -12,7 +12,7 @@ YOLO_MODEL_PATH = "best_seg_n.pt"
 
 # ĐƯỜNG DẪN ĐẾN ẢNH LỚN CỦA BẠN (quan trọng)
 # Ví dụ: ảnh 4K, ảnh drone...
-LARGE_IMAGE_PATH = "F1_scaled.png"
+LARGE_IMAGE_PATH = "1.png"
 
 # Kích thước ô (tile size) - Nên bằng kích thước huấn luyện của bạn
 SLICE_HEIGHT = 640
@@ -69,7 +69,10 @@ try:
     sahi_result.export_visuals(export_dir="demo_data/")
     Image("demo_data/prediction_visual.png")
 
-
+    img = cv2.imread("demo_data/prediction_visual.png")
+    cv2.imshow("prediction visual", img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 except Exception as e:
     print(f"Lỗi trong quá trình dự đoán: {e}")
