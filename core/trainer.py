@@ -53,10 +53,10 @@ class YOLOV11Trainer:
             return
 
         # tìm model_name trong config. Nếu không thầy thì default: YOLO11x-seg.pt
-        model_name = self.config.get("model_name","yolo11x-seg.yaml")
+        model_name = self.config.get("model_name","yolo11n-seg.yaml")
         print("_____ Đang ta mô hình cơ sở: {}".format(model_name))
         # load model
-        model = YOLO(model_name) # load model với phiên bản nặng nhất.
+        model = YOLO(model_name).load("yolo11n.pt") # load model với phiên bản nặng nhất.
 
         dataset_path = self.config.get('dataset_yaml')
         training_params = self.config.get('training_params', {})
