@@ -1,4 +1,4 @@
-model_name: yolo11x-seg.yaml
+model_name: yolo11n-seg.yaml
 dataset_yaml: dataset/data.yaml
 
 # training
