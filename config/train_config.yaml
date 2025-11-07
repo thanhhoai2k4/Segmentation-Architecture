@@ -7,7 +7,7 @@ dataset_yaml: dataset/data.yaml
 # https://docs.ultralytics.com/vi/modes/train/
 training_params:
   epochs: 150
-  batch: 50
+  batch: 100
   imgsz: 640
   name: YOLO_SEGMENT_FLOOR_PLAN
   device: [0, 1]
