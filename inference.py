@@ -8,7 +8,7 @@ from IPython.display import Image
 
 # ĐƯỜNG DẪN ĐẾN MODEL CỦA BẠN (quan trọng)
 # Đây là model 'best.pt' hoặc 'yolov8n.pt'
-YOLO_MODEL_PATH = "best.pt"
+YOLO_MODEL_PATH = "best_seg_n.pt"
 
 # ĐƯỜNG DẪN ĐẾN ẢNH LỚN CỦA BẠN (quan trọng)
 # Ví dụ: ảnh 4K, ảnh drone...
