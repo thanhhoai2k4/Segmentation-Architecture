@@ -1,4 +1,4 @@
-ultralytics
-sahi
 IPython
 kaggle
+ultralytics
+sahi

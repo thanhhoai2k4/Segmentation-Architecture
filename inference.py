@@ -3,7 +3,7 @@ from sahi import AutoDetectionModel
 from sahi.predict import get_sliced_prediction
 from ultralytics.utils.files import increment_path  # Tiện ích của Ultralytics
 from pathlib import Path
-from IPython.display import Image
+from IPython.display import Image, display
 # --- 1. CẤU HÌNH ---
 
 # ĐƯỜNG DẪN ĐẾN MODEL CỦA BẠN (quan trọng)
@@ -65,15 +65,11 @@ try:
     object_prediction_list = sahi_result.object_prediction_list
     print(f"Tìm thấy {len(object_prediction_list)} đối tượng.")
 
-    # --- 4. VẼ KẾT QUẢ VÀ LƯU ẢNH ---
-
-    # Đọc ảnh gốc để vẽ
-    image_to_draw = cv2.imread(LARGE_IMAGE_PATH)
-    if image_to_draw is None:
-        raise FileNotFoundError(f"Không thể đọc ảnh từ: {LARGE_IMAGE_PATH}")
 
     sahi_result.export_visuals(export_dir="demo_data/")
     Image("demo_data/prediction_visual.png")
+
+
 
 except Exception as e:
     print(f"Lỗi trong quá trình dự đoán: {e}")
