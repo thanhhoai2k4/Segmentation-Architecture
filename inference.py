@@ -11,7 +11,7 @@ YOLO_MODEL_PATH = "models/best_lan3.pt"
 
 # ĐƯỜNG DẪN ĐẾN ẢNH LỚN CỦA BẠN (quan trọng)
 # Ví dụ: ảnh 4K, ảnh drone...
-LARGE_IMAGE_PATH = "my_result/images/1.png"
+LARGE_IMAGE_PATH = "my_result/images/8_2.jpg"
 
 # Kích thước ô (tile size) - Nên bằng kích thước huấn luyện của bạn
 SLICE_HEIGHT = 640
@@ -24,7 +24,7 @@ OVERLAP_RATIO = 0.1
 CONF_THRESHOLD = 0.3
 
 # Nơi lưu kết quả
-SAVE_DIR = Path("my_result/results")
+SAVE_DIR = Path("my_result/result")
 SAVE_DIR.mkdir(parents=True, exist_ok=True)
 save_path = str(increment_path(SAVE_DIR / Path(LARGE_IMAGE_PATH).name))
 
