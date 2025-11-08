@@ -1,12 +1,12 @@
 from ultralytics import YOLO
-from PIL import Image
 
-def predictor(image_path, model_name):
-    # load model
-    model = YOLO(model_name)
+def predictor(
+        image_path,
+        model_name,
+        Slice_height,
+        Slice_width,
+        OVERLAP_RATIO,
+        CONF_THRESHOLD
+):
 
-    image_source = image_path
-
-
-    results = model(image_source)
-    results[0].show()
+    pass

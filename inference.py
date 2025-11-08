@@ -1,4 +1,3 @@
-import cv2
 from sahi import AutoDetectionModel
 from sahi.predict import get_sliced_prediction
 from ultralytics.utils.files import increment_path  # Tiện ích của Ultralytics
@@ -7,12 +6,12 @@ from IPython.display import Image, display
 # --- 1. CẤU HÌNH ---
 
 # ĐƯỜNG DẪN ĐẾN MODEL CỦA BẠN (quan trọng)
-# Đây là model 'best.pt' hoặc 'yolov8n.pt'
-YOLO_MODEL_PATH = "best_seg_n.pt"
+# Đây là model 'best_l1_x.pt' hoặc 'yolov8n.pt'
+YOLO_MODEL_PATH = "models/best_lan3.pt"
 
 # ĐƯỜNG DẪN ĐẾN ẢNH LỚN CỦA BẠN (quan trọng)
 # Ví dụ: ảnh 4K, ảnh drone...
-LARGE_IMAGE_PATH = "1.png"
+LARGE_IMAGE_PATH = "my_result/images/1.png"
 
 # Kích thước ô (tile size) - Nên bằng kích thước huấn luyện của bạn
 SLICE_HEIGHT = 640
@@ -25,7 +24,7 @@ OVERLAP_RATIO = 0.1
 CONF_THRESHOLD = 0.3
 
 # Nơi lưu kết quả
-SAVE_DIR = Path("demo_data")
+SAVE_DIR = Path("my_result/results")
 SAVE_DIR.mkdir(parents=True, exist_ok=True)
 save_path = str(increment_path(SAVE_DIR / Path(LARGE_IMAGE_PATH).name))
 
@@ -66,13 +65,9 @@ try:
     print(f"Tìm thấy {len(object_prediction_list)} đối tượng.")
 
 
-    sahi_result.export_visuals(export_dir="demo_data/")
-    Image("demo_data/prediction_visual.png")
+    sahi_result.export_visuals(export_dir="my_result/result")
+    Image("my_result/result/1.png")
 
-    img = cv2.imread("demo_data/prediction_visual.png")
-    cv2.imshow("prediction visual", img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
 
 except Exception as e:
     print(f"Lỗi trong quá trình dự đoán: {e}")

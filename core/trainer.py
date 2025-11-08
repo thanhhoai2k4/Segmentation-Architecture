@@ -56,7 +56,7 @@ class YOLOV11Trainer:
         model_name = self.config.get("model_name","yolo11n-seg.yaml")
         print("_____ Đang ta mô hình cơ sở: {}".format(model_name))
         # load model
-        model = YOLO(model_name).load("best_seg_n.pt")
+        model = YOLO(model_name).load("best_seg_n_l1.pt")
 
         dataset_path = self.config.get('dataset_yaml')
         training_params = self.config.get('training_params', {})
