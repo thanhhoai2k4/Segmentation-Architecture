@@ -47,7 +47,7 @@ Note:
 Tôi sử dụng yolo segmnet của ultralytic để nhận dạng và phân vùng các đối tượng.
 Ở đây tôi sử dụng phiên bản nhẹ nhất của v11 để đào tạo và quấn luyện model. 
 
-## 3. kết quả**
+## 3. kết quả
 
 
 
