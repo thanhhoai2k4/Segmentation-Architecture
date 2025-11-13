@@ -1,3 +1,4 @@
 ultralytics
 sahi
 opencv-python
+topologicpy
