@@ -1,4 +1,5 @@
 ultralytics
 sahi
 opencv-python
+scikit-learn
 topologicpy

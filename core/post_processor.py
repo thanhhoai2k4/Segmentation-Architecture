@@ -4,8 +4,7 @@ import os.path
 import cv2
 import numpy as np
 from dataclasses import dataclass
-
-
+from sklearn.decomposition import PCA
 
 @dataclass
 class RawObject:
@@ -181,53 +180,93 @@ class FeatureExtractor:
 
     def _process_wall(self, wall_obj: RawObject, obj_id: str) -> WallFeature | None:
 
-        """
-            Đây là bước quan trọng nhất  và phứt tạp nhất: Chuyển đổi các đa giác thành các đường tâmcenterline(). Có độ dày(Thickness)
-
-
-            Thuật toán:
-                -
-
-        """
-
-
         print(f"processing {obj_id}....")
-        try:
 
-            bbox = wall_obj.bbox
+        try:
+            # --- 1) Thử dùng polygon nếu có ---
+            poly_flat = getattr(wall_obj, "polygon", None)
+            if poly_flat and isinstance(poly_flat, (list, tuple)) and len(poly_flat) >= 6:
+                try:
+                    pts = np.array(poly_flat, dtype=float).reshape(-1, 2)  # shape (N,2)
+                except Exception:
+                    pts = None
+
+                if pts is not None and pts.shape[0] >= 3:
+                    # Center the points
+                    mean = pts.mean(axis=0)
+                    pts_centered = pts - mean  # (N,2)
+
+                    # Run PCA (keep first component)
+                    try:
+                        pca = PCA(n_components=2)
+                        pca.fit(pts_centered)  # fit to centered pts
+                        # principal axis (unit vector) in original coordinates
+                        pc1 = pca.components_[0]  # length-2 unit vector
+                    except Exception:
+                        pc1 = None
+
+                    if pc1 is not None:
+                        # Project centered points onto the principal axis
+                        projections = pts_centered.dot(pc1)  # (N,) scalar projecting onto axis
+                        min_proj = projections.min()
+                        max_proj = projections.max()
+
+                        # Endpoints in original coordinates (world coords)
+                        start = mean + pc1 * min_proj
+                        end = mean + pc1 * max_proj
+
+                        # For thickness: compute projection onto the perpendicular direction
+                        # perpendicular vector (unit)
+                        perp = np.array([-pc1[1], pc1[0]])
+                        perp_projs = pts_centered.dot(perp)
+                        # thickness is range of perp projections (absolute distance)
+                        perp_min = perp_projs.min()
+                        perp_max = perp_projs.max()
+                        thickness = float(abs(perp_max - perp_min))
+
+                        # If thickness is zero or extremely small (degenerate), fallback to bbox below
+                        if thickness <= 0.5:
+                            # degenerate polygon: set thickness to small positive and continue to bbox fallback
+                            thickness = 0.0
+
+                        # Return WallFeature if thickness sensible
+                        if thickness > 0:
+                            return WallFeature(
+                                id=obj_id,
+                                start_point=(float(start[0]), float(start[1])),
+                                end_point=(float(end[0]), float(end[1])),
+                                thickness=thickness
+                            )
+                        # else fall through to bbox fallback
+            # --- 2) Fallback: dùng bbox ---
+            bbox = getattr(wall_obj, "bbox", None)
             if not bbox or len(bbox) < 4:
                 return None
 
-            x1, y1, x2, y2 = bbox[0], bbox[1], bbox[2], bbox[3]
+            x1, y1, x2, y2 = float(bbox[0]), float(bbox[1]), float(bbox[2]), float(bbox[3])
             width = x2 - x1
             height = y2 - y1
-
             if width <= 0 or height <= 0:
-                return None  # bbox không hợp lệ
+                return None
 
-            # Xác định hướng và tính toán centerline
             if width > height:
-                # Đây là TƯỜNG NGANG (Horizontal)
-                cy = y1 + height / 2  # Tọa độ y của đường tâm
+                # horizontal
+                cy = y1 + height / 2.0
                 start_point_xy = (float(x1), float(cy))
                 end_point_xy = (float(x2), float(cy))
-                thickness = height
+                thickness = float(height)
             else:
-                # Đây là TƯỜNG DỌC (Vertical)
-                cx = x1 + width / 2  # Tọa độ x của đường tâm
+                cx = x1 + width / 2.0
                 start_point_xy = (float(cx), float(y1))
                 end_point_xy = (float(cx), float(y2))
-                thickness = width
+                thickness = float(width)
 
-            return WallFeature(
-                id=obj_id,
-                start_point=start_point_xy,
-                end_point=end_point_xy,
-                thickness=thickness
-            )
+            return WallFeature(id=obj_id, start_point=start_point_xy, end_point=end_point_xy, thickness=thickness)
 
         except Exception as e:
-            pass
+            # không làm rớt chương trình, in lỗi để debug
+            print(f"Error processing wall {obj_id}: {e}")
+            return None
 
     def _process_opening(self, opening_obj: RawObject, obj_id: str) -> OpeningFeature | None:
         """
